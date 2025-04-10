@@ -31,15 +31,15 @@ This is a static web application built using Python and Flask to showcase an eve
 Event-Web-App/
 ├── app.py           # Main Flask Application
 ├── templates/       # HTML Templates
-│   ├── base.html    # Base Template
-│   ├── index.html   # Home Page
-│   ├── about.html   # About Page
-│   ├── schedule.html # Schedule Page
-│   └── contact.html # Contact Page
-├── static/          # Static Files (CSS, JS, Images)
-│   ├── styles.css   # CSS Styling
-│   └── images/      # Images and other assets
-└── requirements.txt # Python Dependencies
+│   ├── base.html    
+│   ├── index.html  
+│   ├── about.html   
+│   ├── schedule.html 
+│   └── contact.html 
+├── static/          
+│   ├── styles.css   
+│   └── images/      
+└── requirements.txt 
 
 ```
 
