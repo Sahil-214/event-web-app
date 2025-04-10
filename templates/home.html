@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Unleash the Power of Innovation</h1>
+        <p class="hero-description">Experience the most awaited event of the year, where leaders, innovators, and enthusiasts come together to shape the future.</p>
+        <p><strong>Date:</strong> Jun 15, 2025 &nbsp; | &nbsp; <strong>Location:</strong> New York City</p>
+        <a href="{{ url_for('contact') }}" class="cta-button">Reserve Your Spot</a>
+    </div>
+</section>
+
+<section class="events">
+    <h2>Our Events</h2>
+    
+    <!-- Upcoming Event -->
+    <div class="event">
+        <h3>AI Conference 2025</h3>
+        <p><strong>Date:</strong> March 15, 2025</p>
+        <p><strong>Location:</strong> New York City</p>
+        <p>Join industry leaders to explore cutting-edge AI technologies and trends.</p>
+        <a href="#" class="cta-button">Learn More</a>
+    </div>
+
+    <!-- Past Event -->
+    <div class="event">
+        <h3>Data Science Summit 2024</h3>
+        <p><strong>Date:</strong> September 10, 2024</p>
+        <p><strong>Location:</strong> San Francisco</p>
+        <p>An immersive event focused on data-driven decision-making and innovations.</p>
+        <a href="#" class="cta-button">Event Highlights</a>
+    </div>
+
+    <!-- Another Past Event -->
+    <div class="event">
+        <h3>Cloud Computing Workshop</h3>
+        <p><strong>Date:</strong> June 5, 2024</p>
+        <p><strong>Location:</strong> Online</p>
+        <p>A hands-on workshop for mastering Azure and AWS cloud technologies.</p>
+        <a href="#" class="cta-button">View Workshop</a>
+    </div>
+</section>
+{% endblock %}
