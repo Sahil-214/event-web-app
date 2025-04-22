@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: event-web-app-config
+  labels:
+    app: event-web-app
+data:
+  # Key-value pairs for environment variables
+  APP_ENV: "production"
+  FLASK_DEBUG: "0"
+  DB_URL: "postgresql://user:password@db-host:5432/eventdb"
+
+  # File-like configurations (e.g., Nginx config)
+  nginx.conf: |
+    server {
+      listen 80;
+      server_name youreventapp.com;
+      location / {
+        proxy_pass http://event-web-app-service:5000;
+      }
+    }

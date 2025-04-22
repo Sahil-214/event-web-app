@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-web-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: event-web-app
+  template:
+    metadata:
+      labels:
+        app: event-web-app
+    spec:
+      containers:
+      - name: flask-app
+        image: your-registry/event-web-app:v1  # Always use version tags!
+        ports:
+        - containerPort: 5000
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 30
