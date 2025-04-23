@@ -3,26 +3,26 @@ kind: Deployment
 metadata:
   name: event-web-app
 spec:
-  replicas: 3
+  replicas: 3                              # Deploy 3 replicas of the app (high availability)
   selector:
     matchLabels:
-      app: event-web-app
+      app: event-web-app                   # Pod selector label to match the app pods
   template:
     metadata:
       labels:
-        app: event-web-app
+        app: event-web-app                 # Labels for identifying the pods
     spec:
       containers:
-      - name: flask-app
-        image: your-registry/event-web-app:v1  # Always use version tags!
+      - name: flask-app                    # Container name
+        image: your-registry/event-web-app:v1  # Docker image with version tag
         ports:
-        - containerPort: 5000
+        - containerPort: 5000              # The port on which your container listens
         resources:
           limits:
-            cpu: "500m"
-            memory: "512Mi"
+            cpu: "500m"                    # Limit of 0.5 CPU for the container
+            memory: "512Mi"                # Limit of 512 MiB of memory
         livenessProbe:
           httpGet:
-            path: /health
-            port: 5000
-          initialDelaySeconds: 30
+            path: /health                  # Path to check for liveness probe (a health check endpoint)
+            port: 5000                     # The port for the health check
+          initialDelaySeconds: 30          # Delay before starting health checks after pod creation

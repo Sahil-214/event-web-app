@@ -1,14 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: event-web-app-service
-  labels:
-    app: event-web-app
+  name: eventwebapp-service
 spec:
-  type: ClusterIP  # Internal service (default)
-  ports:
-    - name: http
-      port: 80
-      targetPort: 5000  # Matches your Flask app's port
+  type: NodePort        # Exposes the service on a specific node port
   selector:
-    app: event-web-app  # Must match deployment labels
+    app: eventwebapp    # Selects the pods with the "app: eventwebapp" label
+  ports:
+    - protocol: TCP
+      port: 80          # Exposes port 80 on the service
+      targetPort: 5000   # Forwards traffic to port 5000 in the container
+      nodePort: 30080    # Exposes the service on port 30080 on every node
