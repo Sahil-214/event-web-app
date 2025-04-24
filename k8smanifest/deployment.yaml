@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: flask-app                    # Container name
-        image: your-registry/event-web-app:v1  # Docker image with version tag
+        image: sahil214/event-web-app:v1  # Docker image with version tag
         ports:
         - containerPort: 5000              # The port on which your container listens
         resources:
