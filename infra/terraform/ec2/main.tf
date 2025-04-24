@@ -57,7 +57,7 @@ resource "aws_route_table_association" "event_assoc" {
 # Create a security group in the new VPC
 resource "aws_security_group" "eventgroups" {
   name        = "eventgroups"
-  description = "Allow SSH, HTTP and custom app access"
+  description = "Allow SSH, HTTP, SonarQube, and monitoring access"
   vpc_id      = aws_vpc.event_vpc.id
 
   ingress {
@@ -81,6 +81,36 @@ resource "aws_security_group" "eventgroups" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Prometheus, Node Exporter, Grafana
+  ingress {
+    from_port   = 9090
+    to_port     = 9090
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 9100
+    to_port     = 9100
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # SonarQube
+  ingress {
+    from_port   = 9000
+    to_port     = 9000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -93,9 +123,9 @@ resource "aws_security_group" "eventgroups" {
   }
 }
 
-# Launch EC2 in the new VPC
+# Launch EC2 instance for web app
 resource "aws_instance" "event_instance" {
-  ami                    = "ami-0e35ddab05955cf57" # Ubuntu 22.04 LTS for ap-south-1
+  ami                    = "ami-0e35ddab05955cf57" # Ubuntu 22.04 LTS in ap-south-1
   instance_type          = "t2.medium"
   subnet_id              = aws_subnet.event_subnet.id
   key_name               = var.key_name
@@ -105,5 +135,20 @@ resource "aws_instance" "event_instance" {
 
   tags = {
     Name = "event-web-ec2"
+  }
+}
+
+# Launch EC2 instance for monitoring tools
+resource "aws_instance" "monitoring_instance" {
+  ami                    = "ami-0e35ddab05955cf57" # Ubuntu 22.04 LTS in ap-south-1
+  instance_type          = "t2.medium"
+  subnet_id              = aws_subnet.event_subnet.id
+  key_name               = var.key_name
+  vpc_security_group_ids = [aws_security_group.eventgroups.id]
+
+  user_data = file("monitoring_install.sh")
+
+  tags = {
+    Name = "monitoring-ec2"
   }
 }
