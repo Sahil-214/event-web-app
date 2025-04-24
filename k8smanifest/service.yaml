@@ -2,12 +2,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: eventwebapp-service
+  namespace: event-web-app
 spec:
-  type: NodePort        # Exposes the service on a specific node port
+  type: NodePort
   selector:
-    app: eventwebapp    # Selects the pods with the "app: eventwebapp" label
+    app: event-web-app
   ports:
-    - protocol: TCP
-      port: 80          # Exposes port 80 on the service
-      targetPort: 5000   # Forwards traffic to port 5000 in the container
-      nodePort: 30080    # Exposes the service on port 30080 on every node
+    - port: 80
+      targetPort: 5000
+      nodePort: 30080
