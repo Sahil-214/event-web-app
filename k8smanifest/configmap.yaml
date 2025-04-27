@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: event-web-app-config
-  namespace: event-web-app
-data:
-  # Only keep essential configs
-  APP_ENV: "production"
-  FLASK_DEBUG: "0"

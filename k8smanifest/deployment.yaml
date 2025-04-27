@@ -2,9 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: event-web-app
-  namespace: event-web-app
+  labels:
+    app: event-web-app
 spec:
-  replicas: 2  # Reduced since it's static
+  replicas: 2
   selector:
     matchLabels:
       app: event-web-app
@@ -14,16 +15,7 @@ spec:
         app: event-web-app
     spec:
       containers:
-      - name: flask-app
-        image: sahil214/event-web-app:v1  # Updated image without DB code
+      - name: event-web-app
+        image: sahil214/event-web-app:v1
         ports:
-        - containerPort: 5000
-        resources:
-          limits:
-            cpu: "200m"  # Reduced resources
-            memory: "256Mi"
-        livenessProbe:
-          httpGet:
-            path: /health  # Now exists!
-            port: 5000
-          initialDelaySeconds: 10
+        - containerPort: 8080
