@@ -18,4 +18,4 @@ spec:
       - name: event-web-app
         image: sahil214/event-web-app:static-v1
         ports:
-        - containerPort: 8080
+        - containerPort: 5000
