@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: event-web-app
-        image: sahil214/event-web-app:static-v1
+        image: sahil214/event-web-app:
         ports:
         - containerPort: 5000
