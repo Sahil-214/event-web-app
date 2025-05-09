@@ -13,7 +13,7 @@ resource "aws_vpc" "event_vpc" {
   }
 }
 
-# Create a public subnet
+# Create a public subnet in ap-south-1a
 resource "aws_subnet" "event_subnet" {
   vpc_id                  = aws_vpc.event_vpc.id
   cidr_block              = "10.0.1.0/24"
@@ -22,6 +22,18 @@ resource "aws_subnet" "event_subnet" {
 
   tags = {
     Name = "event-subnet"
+  }
+}
+
+# Create a second public subnet in ap-south-1b (for EKS)
+resource "aws_subnet" "event_subnet_2" {
+  vpc_id                  = aws_vpc.event_vpc.id
+  cidr_block              = "10.0.2.0/24"
+  map_public_ip_on_launch = true
+  availability_zone       = "ap-south-1b"
+
+  tags = {
+    Name = "event-subnet-2"
   }
 }
 
@@ -48,9 +60,15 @@ resource "aws_route_table" "event_rt" {
   }
 }
 
-# Associate the route table with subnet
+# Associate the route table with subnet 1
 resource "aws_route_table_association" "event_assoc" {
   subnet_id      = aws_subnet.event_subnet.id
+  route_table_id = aws_route_table.event_rt.id
+}
+
+# Associate the route table with subnet 2
+resource "aws_route_table_association" "event_assoc_2" {
+  subnet_id      = aws_subnet.event_subnet_2.id
   route_table_id = aws_route_table.event_rt.id
 }
 
@@ -81,7 +99,6 @@ resource "aws_security_group" "eventgroups" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Prometheus, Node Exporter, Grafana
   ingress {
     from_port   = 9090
     to_port     = 9090
@@ -103,7 +120,6 @@ resource "aws_security_group" "eventgroups" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # SonarQube
   ingress {
     from_port   = 9000
     to_port     = 9000
@@ -122,10 +138,9 @@ resource "aws_security_group" "eventgroups" {
     Name = "eventgroups"
   }
 }
-
 # Launch EC2 instance for web app
 resource "aws_instance" "event_instance" {
-  ami                    = "ami-0e35ddab05955cf57" # Ubuntu 22.04 LTS in ap-south-1
+  ami                    = "ami-0e35ddab05955cf57"
   instance_type          = "t2.medium"
   subnet_id              = aws_subnet.event_subnet.id
   key_name               = var.key_name
@@ -136,11 +151,15 @@ resource "aws_instance" "event_instance" {
   tags = {
     Name = "event-web-ec2"
   }
+
+  lifecycle {
+    ignore_changes = [subnet_id]
+  }
 }
 
 # Launch EC2 instance for monitoring tools
 resource "aws_instance" "monitoring_instance" {
-  ami                    = "ami-0e35ddab05955cf57" # Ubuntu 22.04 LTS in ap-south-1
+  ami                    = "ami-0e35ddab05955cf57"
   instance_type          = "t2.medium"
   subnet_id              = aws_subnet.event_subnet.id
   key_name               = var.key_name
@@ -150,5 +169,9 @@ resource "aws_instance" "monitoring_instance" {
 
   tags = {
     Name = "monitoring-ec2"
+  }
+
+  lifecycle {
+    ignore_changes = [subnet_id]
   }
 }
