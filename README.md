@@ -122,7 +122,7 @@ Access:
 
 ## 🙌 Contributors
 
-- **Sahil Gupta** – DevOps Engineer Intern @ Sparket Innovations
+- **Sahil Gupta** – DevOps Engineer
 
 
 
